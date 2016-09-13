@@ -1,8 +1,11 @@
-FROM ubuntu
+FROM alpine:3.4
 
-RUN \
-    apt-get update && \
-    RUNLEVEL=1 apt-get install -y icecc 
+RUN apk --no-cache add libcap-ng lzo libstdc++ && \
+    apk --no-cache add --virtual .bdeps alpine-sdk git automake autoconf libtool libcap-ng-dev lzo-dev && \
+    git clone https://github.com/icecc/icecream && \
+    (cd icecream && autoreconf -i && ./configure --without-man && make && make install) && \
+    rm -rf icecream && \
+    apk del .bdeps
 
 # Run icecc daemon in verbose mode
 ENTRYPOINT ["iceccd","-v"]
