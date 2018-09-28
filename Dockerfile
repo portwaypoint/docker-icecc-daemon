@@ -5,7 +5,8 @@ RUN apk --no-cache add libcap-ng lzo libstdc++ && \
     git clone https://github.com/icecc/icecream && \
     (cd icecream && autoreconf -i && ./configure --without-man && make && make install) && \
     rm -rf icecream && \
-    apk del .bdeps
+    apk del .bdeps && \
+    cp /bin/tar /usr/bin/tar
 
 # Run icecc daemon in verbose mode
 ENTRYPOINT ["iceccd","-v"]
